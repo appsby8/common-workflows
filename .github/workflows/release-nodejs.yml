@@ -30,7 +30,6 @@ jobs:
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: echo ${{ steps.release-library.outputs.release-tag }}
-      - run: echo "::set-env name=release-tag::${{ steps.release-library.outputs.release-tag }}"
 
   package:
     runs-on: ubuntu-latest
