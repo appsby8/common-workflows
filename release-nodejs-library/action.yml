@@ -10,9 +10,9 @@ inputs:
     required: true
 
 outputs:
-  cache-hit:
+  release-tag:
     description: "Forward version-bump/newTag output"
-    value: ${{ steps.release-nodejs.outputs.release-tag }}
+    value: ${{ steps.release-library-nodejs.outputs.release-tag }}
 
 runs:
   using: composite

@@ -25,7 +25,7 @@ jobs:
           node-version: ${{ inputs.node-version }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: "echo ${{ steps.release-nodejs.outputs.release-tag }}"
+      - run: "echo ${{ release-tag }}"
 
   # package:
 
