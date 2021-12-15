@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup NodeJS Environment
-        uses: ./setup-node
+        uses: @appsby8/common-workflows/setup-node@main
         with:
           node-version: ${{ inputs.node-version }}
 
