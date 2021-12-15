@@ -30,17 +30,6 @@ jobs:
           gh-token: ${{ secrets.gh_auth_token }}
 
       - run: echo ${{ steps.release-library.outputs.release-tag }}
-
-  package:
-    runs-on: ubuntu-latest
-    needs: [ release ]
-    steps:
-      - uses: actions/checkout@v2
-
-      - uses: appsby8/common-workflows/setup-node@main
-        with:
-          node-version: ${{ inputs.node-version }}
-
       - run: npm ci
       - run: npm pack
       - name: Upload
