@@ -30,7 +30,5 @@ runs:
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
     - name: 'Output Step'
-      env:
-        NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
       shell: bash
-      run: echo "::set-output name=release-tag::$(echo $NEW_TAG)"
+      run: echo "::set-output name=release-tag::${{ steps.version-bump.outputs.newTag }}"
