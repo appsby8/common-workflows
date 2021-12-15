@@ -1,0 +1,30 @@
+name: 'Package and Publish NodeJS Library'
+
+inputs:
+  node-version:
+    description: "Node version to use, default to LTS Fermium (14.x)"
+    required: true
+
+outputs:
+  cache-hit:
+    description: "Forward version-bump/newTag output"
+    value: ${{ steps.release-nodejs.outputs.release-tag }}
+
+runs:
+  using: composite
+  steps:
+    - uses: appsby8/common-workflows/setup-node@main
+      with:
+        node-version: ${{ inputs.node-version }}
+
+    - name: "Automated Version Bump"
+      id: version-bump
+      uses: "phips28/gh-action-bump-version@master"
+      with:
+        tag-prefix: 'v'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: 'Output Step'
+      env:
+        NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+      run: echo "::set-output name=release-tag::$(echo $NEW_TAG)"

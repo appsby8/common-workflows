@@ -20,17 +20,17 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
-      - name: "Automated Version Bump"
-        id: version-bump
-        uses: "phips28/gh-action-bump-version@master"
+      - uses: appsby8/common-workflows/release-nodejs@main
         with:
-          tag-prefix: 'v'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: 'Output Step'
-        env:
-          NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
-        run: echo "new tag $NEW_TAG"
+          node-version: ${{ inputs.node-version }}
+
+      - run: "echo ${{ steps.release-nodejs.outputs.release-tag }}"
+
+  package:
+
+
+  publish:
+
 
 #  package:
 #    runs-on: ubuntu-latest
