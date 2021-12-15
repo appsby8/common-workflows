@@ -7,7 +7,10 @@ on:
         description: "Node version to use, default to LTS Fermium (14.x)"
         required: true
         type: string
-
+    secrets:
+      gh_auth_token:
+        description: "Github Auth Token"
+        required: true
 jobs:
 
   release:
@@ -44,49 +47,24 @@ jobs:
       - name: Upload
         uses: actions/upload-artifact@v2
         with:
-          name: ${{github.repository}}-${{ steps.release-library.outputs.release-tag }}
+          name: ${{github.sha}}
           path: "*.tgz"
 
-
-
-  # publish:
-
-
-#  package:
-#    runs-on: ubuntu-latest
-#    needs: [ release ]
-#
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      - uses: appsby8/common-workflows/setup-node@main
-#        with:
-#          node-version: ${{ inputs.node-version }}
-#
-#      - run: npm ci
-#      - run: npm pack
-#      - name: Upload
-#        uses: actions/upload-artifact@v2
-#        with:
-#          name: package
-#          path: "*.tgz"
-#
-
-
-        #   package:
-#     runs-on: ubuntu-latest
-#     needs: [ release ]
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Use Node.js 14.x
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: 14.x
-#       - run: npm ci
-#       - run: npm pack
-#       - name: Upload
-#         uses: actions/upload-artifact@v2
-#         with:
-#           name: package
-#           path: "*.tgz"
-#
+  publish:
+    name: "Publish to GitHub Packages"
+    needs: [ package ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download package
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{github.sha}}
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+          registry-url: https://npm.pkg.github.com/
+          scope: "@appsby8"
+      - run: echo "registry=https://npm.pkg.github.com/@appsby8" >> .npmrc
+      - run: npm publish $(ls *.tgz)
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.gh_auth_token }}
