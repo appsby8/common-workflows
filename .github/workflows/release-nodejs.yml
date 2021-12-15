@@ -1,7 +1,7 @@
 name: Release NodeJS Library
 
 on:
-  workflow_dispatch:
+  workflow_call:
     inputs:
       node-version:
         description: "Node version to use, default to LTS Fermium (14.x)"
