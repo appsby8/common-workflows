@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup NodeJS Environment
-        uses: ./actions/setup-node
+        uses: ./setup-node
         with:
           node-version: ${{ inputs.node-version }}
 
