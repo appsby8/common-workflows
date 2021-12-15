@@ -27,7 +27,7 @@ jobs:
         id: release-library
         with:
           node-version: ${{ inputs.node-version }}
-          gh-token: ${{ secrets.GITHUB_TOKEN }}
+          gh-token: ${{ secrets.gh_auth_token }}
 
       - run: echo ${{ steps.release-library.outputs.release-tag }}
 
