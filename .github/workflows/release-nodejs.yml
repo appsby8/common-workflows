@@ -21,11 +21,12 @@ jobs:
           node-version: ${{ inputs.node-version }}
 
       - uses: appsby8/common-workflows/release-nodejs-library@main
+        id: release-library
         with:
           node-version: ${{ inputs.node-version }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: "echo ${{ steps.release-library-nodejs.outputs.release-tag }}"
+      - run: echo ${{ steps.release-library-nodejs.outputs.release-tag }}
 
   # package:
 
