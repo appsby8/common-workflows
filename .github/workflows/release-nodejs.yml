@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
 
-      - uses: appsby8/common-workflows/release-nodejs@main
+      - uses: appsby8/common-workflows/release-nodejs-library@main
         with:
           node-version: ${{ inputs.node-version }}
 
