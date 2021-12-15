@@ -27,7 +27,7 @@ runs:
       with:
         tag-prefix: 'v'
       env:
-        GITHUB_TOKEN: ${{ github-token }}
+        GITHUB_TOKEN: ${{ inputs.gh-token }}
     - name: 'Output Step'
       env:
         NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
