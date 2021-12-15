@@ -26,6 +26,7 @@ runs:
       uses: "phips28/gh-action-bump-version@master"
       with:
         tag-prefix: 'v'
+        skip-push: true
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
     - name: 'Output Step'
