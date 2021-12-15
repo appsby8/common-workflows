@@ -1,0 +1,78 @@
+name: Common NodeJS CI Workflow
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node version to use, default to LTS Fermium (14.x)"
+        required: true
+        type: string
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup NodeJS Environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - uses: actions/cache@v2
+        id: cache-node-modules
+        with:
+          path: node_modules
+          # Make the cache dependencies depending on the node version for matrix
+          # testing: the package-lock.json would be the same so an additional
+          # criteria is required to distinguish the caches
+          key: node-modules-${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Install project dependencies
+        shell: bash
+        run: npm ci
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'%
+
+  lint:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}
+      - run: npm run lint
+
+  build:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}
+      - run: npm run build
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+      - uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: node-modules-${{ inputs.node-version }}-${{ hashFiles('package-lock.json') }}
+      - run: npm run test
