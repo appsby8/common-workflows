@@ -1,8 +1,12 @@
 name: 'Package and Publish NodeJS Library'
+description: ''
 
 inputs:
   node-version:
     description: "Node version to use, default to LTS Fermium (14.x)"
+    required: true
+  gh-token:
+    description: "Github token"
     required: true
 
 outputs:
@@ -23,8 +27,9 @@ runs:
       with:
         tag-prefix: 'v'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ github-token }}
     - name: 'Output Step'
       env:
         NEW_TAG: ${{ steps.version-bump.outputs.newTag }}
+      shell: bash
       run: echo "::set-output name=release-tag::$(echo $NEW_TAG)"

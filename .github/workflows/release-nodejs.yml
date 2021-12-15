@@ -23,6 +23,8 @@ jobs:
       - uses: appsby8/common-workflows/release-nodejs-library@main
         with:
           node-version: ${{ inputs.node-version }}
+        secrets:
+          GITHUB_TOKEN: {{ secrets.GITHUB_TOKEN }}
 
       - run: "echo ${{ steps.release-nodejs.outputs.release-tag }}"
 
