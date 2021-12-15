@@ -28,7 +28,24 @@ jobs:
 
       - run: echo ${{ steps.release-library.outputs.release-tag }}
 
-  # package:
+  package:
+    runs-on: ubuntu-latest
+    needs: [ release ]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: appsby8/common-workflows/setup-node@main
+        with:
+          node-version: ${{ inputs.node-version }}
+
+      - run: npm ci
+      - run: npm pack
+      - name: Upload
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{github.repository}}-${{ steps.release-library.outputs.release-tag }}
+          path: "*.tgz"
+
 
 
   # publish:
